@@ -9,6 +9,8 @@ flask-sqlalchemy = "*"
 marshmallow-sqlalchemy = "*"
 flask-cors = "*"
 flask = "*"
+psycopg2 = "*"
+gunicorn = "*"
 
 [dev-packages]
 
