@@ -43,7 +43,7 @@ class Reminder(db.Model):
 
 class ReminderSchema(ma.Schema):
     class Meta:
-        fields = ("id", "text", "date", "moth_id")
+        fields = ("id", "text", "date", "month_id")
 
 reminder_schema = ReminderSchema()
 multiple_reminder_schema = ReminderSchema(many=True)
@@ -74,7 +74,7 @@ def add_month():
 
     new_record = Month(name, year, start_day, days_in_month, days_in_previous_month)
     db.session.add(new_record)
-    db.commit()
+    db.session.commit()
 
     return jsonify(month_schema.dump(new_record))
 
@@ -105,19 +105,20 @@ def add_multiple_month():
             db.session.commit()
             new_records.append(new_record)
 
-        return jsonify(multiple_month_schema.dump(new_records))
+    return jsonify(multiple_month_schema.dump(new_records))
 
 @app.route("/month/get", methods=["GET"])
 def get_months():
     all_months = db.session.query(Month).all()
     return jsonify(multiple_month_schema.dump(all_months))
 
-@app.route("month/get/<id>", methods=["GET"])
+
+@app.route("/month/get/<id>", methods=["GET"])
 def get_one_month(id):
     one_month = db.session.query(Month).filter(Month.id == id).first()
     return jsonify(month_schema.dump(one_month))
 
-@app.route("month/delete/<id>", methods=["DELETE"])
+@app.route("/month/delete/<id>", methods=["DELETE"])
 def delete_one_month(id):
     delete_month = db.session.query(Month).filter(Month.id == id).first()
     db.session.delete(delete_month)
